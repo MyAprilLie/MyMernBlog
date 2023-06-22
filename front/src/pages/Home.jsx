@@ -62,55 +62,71 @@ export const Home = () => {
       <Grid container spacing={4}>
         <Grid xs={8} item>
           {isPostsLoading
-            ? [...Array(5)].map((_, index) => (
-                <Post key={index} isLoading={true} />
+              ? [...Array(5)].map((_, index) => (
+                  <Post key={index} isLoading={true} />
               ))
-            : activeTab === 0
-            ? posts.items.map((obj) => {
-                const postComments = comments[obj._id] || [];
-                return (
-                  <Post
-                    key={obj._id}
-                    _id={obj._id}
-                    title={obj.title}
-                    imageUrl={
-                      obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ""
-                    }
-                    user={obj.user}
-                    createdAt={obj.createdAt}
-                    viewsCount={obj.viewsCount}
-                    commentsCount={postComments.length} 
-                    tags={obj.tags}
-                    isEditable={userData?._id === obj.user._id}
-                    onTagClick={handleTagClick}
-                  />
-                );
-              })
-            : posts.items
-                .slice()
-                .sort((a, b) => b.viewsCount - a.viewsCount)
-                .map((obj) => {
-                  const postComments = comments[obj._id] || [];
-                  return (
-                    <Post
-                      key={obj._id}
-                      _id={obj._id}
-                      title={obj.title}
-                      imageUrl={
-                        obj.imageUrl
-                          ? `http://localhost:4444${obj.imageUrl}`
-                          : ""
-                      }
-                      user={obj.user}
-                      createdAt={obj.createdAt}
-                      viewsCount={obj.viewsCount}
-                      commentsCount={postComments.length} 
-                      tags={obj.tags}
-                      isEditable={userData?._id === obj.user._id}
-                      onTagClick={handleTagClick}
-                    />
-                  );
-                })}
+              : activeTab === 0
+                  ? posts.items.map((obj) => {
+                    const postComments = comments[obj._id] || [];
+                    const createdAt = new Date(obj.createdAt);
+                    const formattedDate = `${createdAt.getDate()}-${
+                        createdAt.getMonth() + 1
+                    }-${createdAt.getFullYear()}`;
+                    const formattedTime = createdAt.toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    });
+                    return (
+                        <Post
+                            key={obj._id}
+                            _id={obj._id}
+                            title={obj.title}
+                            imageUrl={
+                              obj.imageUrl ? `http://localhost:4444${obj.imageUrl}` : ""
+                            }
+                            user={obj.user}
+                            createdAt={`${formattedDate} ${formattedTime}`}
+                            viewsCount={obj.viewsCount}
+                            commentsCount={postComments.length}
+                            tags={obj.tags}
+                            isEditable={userData?._id === obj.user._id}
+                            onTagClick={handleTagClick}
+                        />
+                    );
+                  })
+                  : posts.items
+                      .slice()
+                      .sort((a, b) => b.viewsCount - a.viewsCount)
+                      .map((obj) => {
+                        const postComments = comments[obj._id] || [];
+                        const createdAt = new Date(obj.createdAt);
+                        const formattedDate = `${createdAt.getDate()}-${
+                            createdAt.getMonth() + 1
+                        }-${createdAt.getFullYear()}`;
+                        const formattedTime = createdAt.toLocaleTimeString([], {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        });
+                        return (
+                            <Post
+                                key={obj._id}
+                                _id={obj._id}
+                                title={obj.title}
+                                imageUrl={
+                                  obj.imageUrl
+                                      ? `http://localhost:4444${obj.imageUrl}`
+                                      : ""
+                                }
+                                user={obj.user}
+                                createdAt={`${formattedDate} ${formattedTime}`}
+                                viewsCount={obj.viewsCount}
+                                commentsCount={postComments.length}
+                                tags={obj.tags}
+                                isEditable={userData?._id === obj.user._id}
+                                onTagClick={handleTagClick}
+                            />
+                        );
+                      })}
         </Grid>
 
         <Grid xs={4} item>
